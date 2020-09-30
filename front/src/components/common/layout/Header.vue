@@ -1,6 +1,6 @@
 <template>
   <div>
-    header
+   <router-link :to="{ name: 'Laba1' }">ЛР 1</router-link>
   </div>
 </template>
 
