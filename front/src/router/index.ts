@@ -13,6 +13,32 @@ const routes: Array<RouteConfig> = [
     path: '/laba1',
     name: 'Laba1',
     component: () => import('@/views/Laba1.vue')
+  },
+  {
+    path: '/laba2',
+    component: () => import('@/views/Laba2.vue'),
+    children: [
+      {
+        path: '',
+        name: 'laba2',
+        component: () => import('@/components/laba2/PillsList.vue')
+      },
+      {
+        path: 'basket',
+        name: 'basket',
+        component: () => import('@/components/laba2/Basket.vue')
+      },
+      {
+        path: 'pill/add',
+        name: 'add_pill',
+        component: () => import('@/components/laba2/AddPill.vue')
+      },
+      {
+        path: 'orders',
+        name: 'pills_orders',
+        component: () => import('@/components/laba2/PillsOrders.vue')
+      }
+    ]
   }
 ]
 
