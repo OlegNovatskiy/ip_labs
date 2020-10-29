@@ -29,6 +29,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import CarSaleForm from '@/components/laba1/CarSaleForm.vue'
 import { Getter } from 'vuex-class'
 import { BasketItem, Category, Pill } from '@/interfaces/laba2'
+import PillsService from '@/services/api/PillsService'
 
 @Component({
   components: {

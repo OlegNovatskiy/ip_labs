@@ -2,8 +2,8 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-        <h1>Лабораторна робота 2</h1>
-        <h2>Розробити Web - додаток. Використати просту модель предметної області «Аптека». Виконати необхідні розрахунки.</h2>
+<!--        <h1>Лабораторна робота 2</h1>-->
+<!--        <h2>Розробити Web - додаток. Використати просту модель предметної області «Аптека». Виконати необхідні розрахунки.</h2>-->
       </v-col>
     </v-row>
     <v-row class="text-center">
@@ -23,8 +23,8 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Laba2 extends Vue {
-  created () {
-    console.log(this.$store.getters)
+  async created () {
+    this.$store.commit('uploadPills')
   }
 }
 </script>

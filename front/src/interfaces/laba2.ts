@@ -1,10 +1,9 @@
 export interface Pill {
-  id: number
+  id: string
   category: number
   name: string
   count: number
   price: number
-  lastModifiedAt?: string
 }
 
 export interface BasketItem {
@@ -25,7 +24,7 @@ export interface Order {
 }
 
 export interface PillForm {
-  id: number | null
+  id?: number | null
   category: number | null
   name: string | null
   count: number | null

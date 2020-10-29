@@ -1,30 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { BasketItem, Pill, Order, OrderItem } from '@/interfaces/laba2'
+import PillsService from '@/services/api/PillsService'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     apteka: {
-      pills: [
-        {
-          id: 1,
-          category: 1,
-          name: 'Анальгін',
-          count: 100,
-          price: 10,
-          lastModifiedAt: '2020-10-23'
-        },
-        {
-          id: 2,
-          category: 3,
-          name: 'Називін',
-          count: 13,
-          price: 75,
-          lastModifiedAt: '2020-10-23'
-        }
-      ],
+      pills: [],
       categories: [
         { id: 1, name: 'Таблетка' },
         { id: 2, name: 'Крем' },
@@ -37,27 +21,25 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    addPill (state, object: Pill) {
-      let max = 0
-      if (!object.id) {
-        state.apteka.pills.forEach((pill: Pill) => {
-          if (pill.id > max) {
-            max = pill.id
-          }
-        })
+    async addPill (state, object: Pill) {
+      let index = -1
+      if (object.id) {
+        index = state.apteka.pills.findIndex((pill: Pill) => pill.id === object.id)
+      }
 
-        object.id = max + 1
-        object.lastModifiedAt = (new Date()).toDateString()
-        state.apteka.pills.push(object)
+      if (!object.id || index === -1) {
+        delete object.id
+        const newPill = await PillsService.createPills(object)
+        state.apteka.pills.push(newPill)
+
         return
       }
 
-      const index = state.apteka.pills.findIndex((pill: Pill) => pill.id === object.id)
-      if (index === -1) {
-        state.apteka.pills.push(object)
-      }
-      state.apteka.pills[index].count = parseInt(state.apteka.pills[index].count) + parseInt(object.count)
-      state.apteka.pills[index].lastModifiedAt = (new Date()).toDateString()
+      object.count = parseInt(state.apteka.pills[index].count) + parseInt(object.count)
+      const id = object.id
+      delete object.id
+      const updatedPill = await PillsService.updatePills(object, id)
+      Vue.set(state.apteka.pills, index, updatedPill)
     },
     addToBasket (state, object: BasketItem) {
       const existingIndex = state.apteka.basket.findIndex(
@@ -102,6 +84,21 @@ export default new Vuex.Store({
 
       Vue.set(state.apteka, 'basket', [])
       state.apteka.orders.push(order)
+    },
+    async uploadPills (state) {
+      state.apteka.pills = await PillsService.uploadPills()
+    },
+    async deletePill (state, id: string) {
+      const index = state.apteka.pills.findIndex((pill: Pill) => pill.id === id)
+      if (index === -1) {
+        return
+      }
+      try {
+        await PillsService.deletePill(id)
+        Vue.delete(state.apteka.pills, index)
+      } catch (e) {
+        alert('Сталася помилка при видаленні')
+      }
     }
   },
   getters: {

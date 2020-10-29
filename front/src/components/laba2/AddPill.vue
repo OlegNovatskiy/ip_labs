@@ -88,6 +88,14 @@
             >
               Добавити таблетки
             </v-btn>
+            <v-btn
+              color="error"
+              class="mr-4"
+              @click="deletePill"
+              v-if="existingPill"
+            >
+              Видалити обрану теблетку
+            </v-btn>
           </v-container>
         </v-form>
       </v-col>
@@ -148,6 +156,14 @@ export default class CarList extends Vue {
 
     this.resetForm()
     // console.log(this.pillForm)
+  }
+
+  deletePill () {
+    if (this.existingPill) {
+      const id = this.existingPill.id
+      this.resetForm()
+      this.$store.commit('deletePill', id)
+    }
   }
 
   @Watch('existingPill')
